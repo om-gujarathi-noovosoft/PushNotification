@@ -9,9 +9,13 @@ import org.springframework.stereotype.Repository
 interface EmailRepository : JpaRepository<Email, Long> {
     @Query(
         """
-            select * from email e where e.executionStatus=QUEUED LIMIT 1
+            select *
+            from email e 
+            where e.execution_status='QUEUED'
+            order by e.time
+            fetch first row only 
         """,
         nativeQuery = true
     )
-    fun getLatestEmail():Email
+    fun getLatestEmail(): Email
 }
