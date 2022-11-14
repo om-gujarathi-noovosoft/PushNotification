@@ -3,16 +3,14 @@ package com.example.pushnotification.services
 import com.example.pushnotification.models.Email
 import com.example.pushnotification.models.ExecutionStatus
 import com.example.pushnotification.repositories.EmailRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.data.domain.Sort
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.stereotype.Service
 
 @Service
 
-class EmailServices(
+class EmailService(
     val emailRepository: EmailRepository,
     val javaMailSender: JavaMailSender
 ) {
@@ -26,7 +24,6 @@ class EmailServices(
 
     fun fetchLatest() {
         sendSimpleMail(emailRepository.getLatestEmail())
-
     }
 
     fun sendSimpleMail(emailDetails: Email): String {
@@ -42,8 +39,8 @@ class EmailServices(
         } catch (e: Exception) {
             "Error in Mail Sending $e"
         }
-
-
+        emailDetails.executionStatus=ExecutionStatus.SENT
+        emailRepository.save(emailDetails)
     }
 
 }

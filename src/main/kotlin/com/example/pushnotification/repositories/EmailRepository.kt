@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository
 interface EmailRepository : JpaRepository<Email, Long> {
     @Query(
         """
-            select * from email e where e.executionStatus=QUEUED LIMIT 1
+            select * from email e where e.execution_status='QUEUED' LIMIT 1
         """,
         nativeQuery = true
     )
