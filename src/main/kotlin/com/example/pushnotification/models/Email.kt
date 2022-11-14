@@ -8,12 +8,19 @@ import javax.persistence.*
 data class Email(
     @Column
     val senderEmail: String,
+
     @Column
-    val reciverEmail: String,
+        val receiverEmail: String,
+
+    @Column
+    val subject: String,
+
     @Column
     val message: String,
+
     @Column
     val messageType: String,
+
     @Column
     @Enumerated(EnumType.STRING)
     val executionStatus: ExecutionStatus
@@ -26,6 +33,7 @@ data class Email(
     val time: java.sql.Time = java.sql.Time(System.currentTimeMillis())
 
 }
+
 enum class ExecutionStatus {
     SENT, QUEUED, SENDING
 }
