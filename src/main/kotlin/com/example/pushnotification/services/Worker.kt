@@ -5,7 +5,7 @@ import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProc
 import org.springframework.stereotype.Service
 
 @Service
-class Worker(private val scheduledAnnotationBeanPostProcessor: ScheduledAnnotationBeanPostProcessor,val emailServices: EmailServices) {
+class Worker(private val scheduledAnnotationBeanPostProcessor: ScheduledAnnotationBeanPostProcessor,val emailServices: EmailService) {
     @Scheduled(fixedRate = 5000L)
     fun start() {
         emailServices.fetchLatest()
