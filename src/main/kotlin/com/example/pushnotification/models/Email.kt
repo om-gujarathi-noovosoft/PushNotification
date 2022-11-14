@@ -9,14 +9,14 @@ data class Email(
     @Column
     val senderEmail: String,
     @Column
-    val reciverEmail: String,
+    val receiverEmail: String,
     @Column
     val message: String,
     @Column
     val messageType: String,
     @Column
     @Enumerated(EnumType.STRING)
-    val executionStatus: ExecutionStatus
+    var executionStatus: ExecutionStatus
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
