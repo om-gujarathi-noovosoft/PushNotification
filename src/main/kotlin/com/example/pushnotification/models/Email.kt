@@ -11,6 +11,8 @@ data class Email(
     @Column
     val receiverEmail: String,
     @Column
+    val subject: String,
+    @Column
     val message: String,
     @Column
     val messageType: String,

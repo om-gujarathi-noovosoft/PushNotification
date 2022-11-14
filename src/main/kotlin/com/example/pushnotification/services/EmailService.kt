@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 
 @Service
 
-class EmailServices(
+class EmailService(
     val emailRepository: EmailRepository,
     val javaMailSender: JavaMailSender
 ) {
@@ -24,7 +24,6 @@ class EmailServices(
 
     fun fetchLatest() {
         sendSimpleMail(emailRepository.getLatestEmail())
-
     }
 
     fun sendSimpleMail(emailDetails: Email): String {
@@ -40,8 +39,8 @@ class EmailServices(
         } catch (e: Exception) {
             "Error in Mail Sending $e"
         }
-
-
+        emailDetails.executionStatus=ExecutionStatus.SENT
+        emailRepository.save(emailDetails)
     }
 
 }
