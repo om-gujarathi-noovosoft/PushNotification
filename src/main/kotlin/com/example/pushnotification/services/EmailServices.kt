@@ -25,7 +25,8 @@ class EmailServices(
     }
 
     fun fetchLatest() {
-        sendSimpleMail(emailRepository.findAll().filter { it.executionStatus == ExecutionStatus.QUEUED }.first())
+        sendSimpleMail(emailRepository.getLatestEmail())
+
     }
 
     fun sendSimpleMail(emailDetails: Email): String {
@@ -36,9 +37,7 @@ class EmailServices(
             mailMessage.setFrom(sender!!)
             mailMessage.setTo(emailDetails.receiverEmail)
             mailMessage.setText(emailDetails.message)
-            mailMessage.setSubject(emailDetails.subject)
-
-            javaMail?.send(mailMessage)
+            javaMailSender?.send(mailMessage)
             "Mail Send"
         } catch (e: Exception) {
             "Error in Mail Sending $e"
