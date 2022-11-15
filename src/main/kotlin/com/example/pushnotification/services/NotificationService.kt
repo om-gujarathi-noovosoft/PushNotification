@@ -1,7 +1,7 @@
 package com.example.pushnotification.services
 
-import com.example.pushnotification.models.Notification
 import com.example.pushnotification.models.ExecutionStatus
+import com.example.pushnotification.models.Notification
 import com.example.pushnotification.repositories.NotificationRepository
 import com.example.pushnotification.viewmodel.NotificationViewModel
 import org.springframework.beans.factory.annotation.Value
@@ -50,9 +50,9 @@ class NotificationService(
             mailMessage.setTo(notificationDetails.receiverEmail)
             mailMessage.setText(notificationDetails.message)
             mailMessage.setSubject(notificationDetails.subject)
-            javaMailSender?.send(mailMessage)
+            javaMailSender.send(mailMessage)
         } catch (e: Exception) {
-            false
+            return false
         }
         notificationDetails.executionStatus = ExecutionStatus.SENT
         notificationRepository.save(notificationDetails)
