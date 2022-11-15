@@ -13,7 +13,10 @@ import org.springframework.stereotype.Service
 
 @Service
 class NotificationService(
-    val notificationRepository: NotificationRepository, val javaMailSender: JavaMailSender,@Lazy val worker: Worker
+    val notificationRepository: NotificationRepository,
+    val javaMailSender: JavaMailSender,
+    @Lazy
+    val worker: Worker
 ) {
 
     @Value("\${spring.mail.username}")
@@ -44,6 +47,7 @@ class NotificationService(
                 val notificationFirstRow = notificationRows.first()
                 when (notificationFirstRow.type) {
                     NotificationType.EMAIL -> sendSimpleMail(notificationFirstRow)
+                    else -> {}
                 }
                 notificationRows = notificationRows.drop(1)
             }
@@ -60,7 +64,7 @@ class NotificationService(
             mailMessage.setSubject(notificationDetails.subject)
             javaMailSender.send(mailMessage)
         } catch (e: Exception) {
-            false
+            return false
         }
         notificationDetails.executionStatus = ExecutionStatus.SENT
         notificationRepository.save(notificationDetails)
