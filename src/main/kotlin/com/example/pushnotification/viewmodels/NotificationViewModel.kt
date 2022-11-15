@@ -1,6 +1,6 @@
 package com.example.pushnotification.viewmodels
 
-class EmailViewModel(
+class NotificationViewModel(
     val receiverEmail: String,
     val subject: String,
     val message: String,

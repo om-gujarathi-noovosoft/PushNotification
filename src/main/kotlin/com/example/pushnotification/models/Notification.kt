@@ -5,7 +5,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "email")
-data class Email(
+data class Notification(
     @Column
     val senderEmail: String,
 
