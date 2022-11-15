@@ -12,8 +12,11 @@ import org.springframework.stereotype.Service
 @Service
 
 class NotificationService(
-    val notificationRepository: NotificationRepository, val javaMailSender: JavaMailSender
+    val notificationRepository: NotificationRepository,
+    val javaMailSender: JavaMailSender,
 ) {
+
+    var v = 0
 
     @Value("\${spring.mail.username}")
     private val sender: String? = null
@@ -32,6 +35,7 @@ class NotificationService(
         )
     }
 
+    @Synchronized
     fun fetchLatest() {
         if (notificationRows.isEmpty()) {
             notificationRows = notificationRepository.getLatestNotification()
@@ -45,6 +49,7 @@ class NotificationService(
     fun sendSimpleMail(notificationDetails: Notification): Boolean {
 
         try {
+            println(notificationDetails.id)
             val mailMessage = SimpleMailMessage()
             mailMessage.setFrom(sender!!)
             mailMessage.setTo(notificationDetails.receiverEmail)
@@ -58,5 +63,4 @@ class NotificationService(
         notificationRepository.save(notificationDetails)
         return true
     }
-
 }
