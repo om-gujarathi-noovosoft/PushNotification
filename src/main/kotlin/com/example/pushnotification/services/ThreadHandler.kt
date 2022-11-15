@@ -13,7 +13,7 @@ class ThreadHandler(notificationService: NotificationService, environment: Envir
     init {
         val threadCount: Int = environment.getProperty("thread.count")?.toInt() ?: 2
         for (i in 0..threadCount) {
-            ApplicationsThreadFactory("worker$i").newThread(Task(notificationService, environment)).start()
+            ApplicationsThreadFactory("worker $i").newThread(Task(notificationService, environment)).start()
         }
     }
 }
