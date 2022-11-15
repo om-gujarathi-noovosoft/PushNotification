@@ -2,17 +2,18 @@ package com.example.pushnotification.services
 
 import com.example.pushnotification.models.Notification
 import com.example.pushnotification.models.ExecutionStatus
+import com.example.pushnotification.models.NotificationType
 import com.example.pushnotification.repositories.NotificationRepository
 import com.example.pushnotification.viewmodel.NotificationViewModel
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Lazy
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.stereotype.Service
 
 @Service
-
 class NotificationService(
-    val notificationRepository: NotificationRepository, val javaMailSender: JavaMailSender
+    val notificationRepository: NotificationRepository, val javaMailSender: JavaMailSender,@Lazy val worker: Worker
 ) {
 
     @Value("\${spring.mail.username}")
@@ -30,13 +31,20 @@ class NotificationService(
                 ExecutionStatus.QUEUED
             )
         )
+        worker.start()
     }
 
     fun fetchLatest() {
         if (notificationRows.isEmpty()) {
             notificationRows = notificationRepository.getLatestNotification()
+            if (notificationRows.isEmpty()) {
+                worker.stop()
+            }
             while (notificationRows.isNotEmpty()) {
-                sendSimpleMail(notificationRows.first())
+                val notificationFirstRow = notificationRows.first()
+                when (notificationFirstRow.type) {
+                    NotificationType.EMAIL -> sendSimpleMail(notificationFirstRow)
+                }
                 notificationRows = notificationRows.drop(1)
             }
         }
@@ -50,7 +58,7 @@ class NotificationService(
             mailMessage.setTo(notificationDetails.receiverEmail)
             mailMessage.setText(notificationDetails.message)
             mailMessage.setSubject(notificationDetails.subject)
-            javaMailSender?.send(mailMessage)
+            javaMailSender.send(mailMessage)
         } catch (e: Exception) {
             false
         }
