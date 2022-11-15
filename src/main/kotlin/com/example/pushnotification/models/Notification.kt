@@ -10,7 +10,7 @@ data class Notification(
     val senderEmail: String,
 
     @Column
-        val receiverEmail: String,
+    val receiverEmail: String,
 
     @Column
     val subject: String,

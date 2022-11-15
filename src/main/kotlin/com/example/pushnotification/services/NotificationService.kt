@@ -31,7 +31,7 @@ class NotificationService(val notificationRepository: NotificationRepository) {
                 subject = notificationViewModel.subject,
                 message = notificationViewModel.message,
                 senderEmail = sender,
-                messageType = "Email",
+                messageType = notificationViewModel.messageType,
                 executionStatus = ExecutionStatus.QUEUED
             )
         )
@@ -67,7 +67,7 @@ class NotificationService(val notificationRepository: NotificationRepository) {
         return try {
             val mailMessage = SimpleMailMessage()
 
-            mailMessage.setFrom(sender!!)
+            mailMessage.setFrom(sender)
             mailMessage.setTo(notificationDetails.receiverEmail)
             mailMessage.setText(notificationDetails.message)
             mailMessage.setSubject(notificationDetails.subject)
