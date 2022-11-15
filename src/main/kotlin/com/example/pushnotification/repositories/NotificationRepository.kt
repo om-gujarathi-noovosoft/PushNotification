@@ -12,9 +12,10 @@ interface NotificationRepository : JpaRepository<Notification, Long> {
             select *
             from notification n 
             where n.execution_status='QUEUED'
-            limit 1
+            order by n.time
+            limit :count
         """,
         nativeQuery = true
     )
-    fun getLatestNotification(): List<Notification>
+    fun getLatestNotification(count:Int): List<Notification>
 }
