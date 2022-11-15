@@ -5,10 +5,10 @@ import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProc
 import org.springframework.stereotype.Service
 
 @Service
-class Worker(private val scheduledAnnotationBeanPostProcessor: ScheduledAnnotationBeanPostProcessor,val emailServices: EmailService) {
+class Worker(private val scheduledAnnotationBeanPostProcessor: ScheduledAnnotationBeanPostProcessor,val notificationServices: NotificationService) {
     @Scheduled(fixedRate = 5000L)
     fun start() {
-        emailServices.fetchLatest()
+        notificationServices.fetchLatest()
     }
 
     fun stop() = scheduledAnnotationBeanPostProcessor.postProcessBeforeDestruction(this, "Worker")
