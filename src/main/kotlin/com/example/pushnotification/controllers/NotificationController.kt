@@ -1,5 +1,6 @@
 package com.example.pushnotification.controllers
 
+import com.example.pushnotification.models.Notification
 import com.example.pushnotification.services.NotificationService
 import com.example.pushnotification.viewmodels.NotificationViewModel
 import org.springframework.web.bind.annotation.*
@@ -10,6 +11,10 @@ import org.springframework.web.bind.annotation.*
 class NotificationController(
     val notificationService: NotificationService
 ) {
+    @GetMapping
+    fun getNotifications(): List<Notification> {
+        return notificationService.getNotifications()
+    }
     @PostMapping
     fun addEmailRequest(@RequestBody notificationViewModel: NotificationViewModel) {
         return notificationService.addEmail(notificationViewModel)

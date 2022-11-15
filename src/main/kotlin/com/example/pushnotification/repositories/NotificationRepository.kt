@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface NotificationRepository : JpaRepository<Notification, Long> {
 
-    fun findEmailByExecutionStatus(executionStatus: ExecutionStatus):List<Notification>
+    fun findNotificationByExecutionStatus(executionStatus: ExecutionStatus):List<Notification>
 }
 

@@ -20,6 +20,10 @@ class NotificationService(val notificationRepository: NotificationRepository) {
     @Value("\${spring.mail.username}")
     private val sender: String = ""
 
+    fun getNotifications(): List<Notification> {
+       return notificationRepository.findNotificationByExecutionStatus(ExecutionStatus.QUEUED).toList()
+    }
+
     fun addEmail(notificationViewModel: NotificationViewModel) {
         notificationRepository.save(
             Notification(
@@ -56,7 +60,10 @@ class NotificationService(val notificationRepository: NotificationRepository) {
         )
     }
 
-    fun sendSimpleMail(notificationDetails: Notification): String {
+    fun fetchNewData(): List<Notification> {
+        return notificationRepository.findNotificationByExecutionStatus(ExecutionStatus.QUEUED)
+    }
+    fun sendSimpleMail(notificationDetails: Notification): ExecutionStatus {
         return try {
             val mailMessage = SimpleMailMessage()
 
@@ -64,11 +71,10 @@ class NotificationService(val notificationRepository: NotificationRepository) {
             mailMessage.setTo(notificationDetails.receiverEmail)
             mailMessage.setText(notificationDetails.message)
             mailMessage.setSubject(notificationDetails.subject)
-
             javaMailSender?.send(mailMessage)
-            "Mail Send"
+            ExecutionStatus.SENT
         } catch (e: Exception) {
-            "Error in Mail Sending $e"
+            ExecutionStatus.FAILED
         }
     }
 

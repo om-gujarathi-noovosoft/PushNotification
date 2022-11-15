@@ -4,7 +4,7 @@ import org.hibernate.annotations.CreationTimestamp
 import javax.persistence.*
 
 @Entity
-@Table(name = "email")
+@Table(name = "notification")
 data class Notification(
     @Column
     val senderEmail: String,
@@ -23,7 +23,7 @@ data class Notification(
 
     @Column
     @Enumerated(EnumType.STRING)
-    val executionStatus: ExecutionStatus
+    var executionStatus: ExecutionStatus
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,5 +35,5 @@ data class Notification(
 }
 
 enum class ExecutionStatus {
-    SENT, QUEUED, SENDING
+    SENT, QUEUED, SENDING, FAILED
 }
