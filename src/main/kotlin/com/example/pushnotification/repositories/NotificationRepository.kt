@@ -10,12 +10,11 @@ interface NotificationRepository : JpaRepository<Notification, Long> {
     @Query(
         """
             select *
-            from email e 
-            where e.execution_status='QUEUED'
-            order by e.time
-            fetch first row only 
+            from notification n 
+            where n.execution_status='QUEUED'
+            limit 1
         """,
         nativeQuery = true
     )
-    fun getLatestEmail(): List<Notification>
+    fun getLatestNotification(): List<Notification>
 }

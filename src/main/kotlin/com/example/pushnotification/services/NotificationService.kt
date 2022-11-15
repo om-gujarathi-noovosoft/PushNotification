@@ -3,6 +3,7 @@ package com.example.pushnotification.services
 import com.example.pushnotification.models.Notification
 import com.example.pushnotification.models.ExecutionStatus
 import com.example.pushnotification.repositories.NotificationRepository
+import com.example.pushnotification.viewmodel.NotificationViewModel
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
@@ -17,18 +18,26 @@ class NotificationService(
     @Value("\${spring.mail.username}")
     private val sender: String? = null
     var notificationRows = listOf<Notification>()
-    fun addNotification(notification: Notification) {
-        notification.executionStatus = ExecutionStatus.QUEUED
-        notificationRepository.save(notification)
+    fun addNotification(notification: NotificationViewModel) {
+        notificationRepository.save(
+            Notification(
+                notification.senderEmail,
+                notification.receiverEmail,
+                notification.subject,
+                notification.message,
+                notification.messageType,
+                notification.type,
+                ExecutionStatus.QUEUED
+            )
+        )
     }
 
     fun fetchLatest() {
         if (notificationRows.isEmpty()) {
-            notificationRows = notificationRepository.getLatestEmail()
-            while(notificationRows.isNotEmpty()) {
-                if (sendSimpleMail(notificationRows[0])) {
-                    notificationRows.drop(0)
-                }
+            notificationRows = notificationRepository.getLatestNotification()
+            while (notificationRows.isNotEmpty()) {
+                sendSimpleMail(notificationRows.first())
+                notificationRows = notificationRows.drop(1)
             }
         }
     }
